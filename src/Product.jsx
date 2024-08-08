@@ -1,35 +1,56 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+
 
 const Product = () => {
   const { productId } = useParams();
 
-  const [product, setProduct] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const fetchProduct = async () => {
+    const response = await fetch(
+      `https://dummyjson.com/products/${productId}`
+    );
+    const data = await response.json();
+    return data;
+  };
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setError(null);
-        setIsLoading(true);
-        const response = await fetch(
-          `https://dummyjson.com/products/${productId}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setProduct(data);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err);
-        setIsLoading(false);
-      }
-    };
+  const {
+    isLoading,
+    error,
+    data: product,
+  } = useQuery({
+    queryKey: ["product", productId],
+    queryFn: fetchProduct,
+    staleTime: 15000,
+  });
 
-    fetchProduct();
-  }, [productId]);
+  // const [product, setProduct] = useState({});
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     try {
+  //       setError(null);
+  //       setIsLoading(true);
+  //       const response = await fetch(
+  //         `https://dummyjson.com/products/${productId}`
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  //       const data = await response.json();
+  //       setProduct(data);
+  //       setIsLoading(false);
+  //     } catch (err) {
+  //       setError(err);
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchProduct();
+  // }, [productId]);
 
   if (isLoading) {
     return <h2>Loading...</h2>;
