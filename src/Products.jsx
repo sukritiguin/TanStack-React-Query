@@ -2,28 +2,46 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Product from "./Product";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchProducts = async () => {
+  const response = await fetch("https://dummyjson.com/products");
+  const data = await response.json();
+
+  return data.products;
+};
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const {
+    isLoading,
+    error,
+    data: products,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+    staleTime: 15000,
+  });
+
+  // const [products, setProducts] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setError(null);
-        setIsLoading(true);
-        const response = await fetch("https://dummyjson.com/products");
-        const data = await response.json();
-        setProducts(data.products);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err);
-        setIsLoading(false);
-      }
-    };
+    // const fetchProduct = async () => {
+    //   try {
+    //     setError(null);
+    //     setIsLoading(true);
+    //     const response = await fetch("https://dummyjson.com/products");
+    //     const data = await response.json();
+    //     setProducts(data.products);
+    //     setIsLoading(false);
+    //   } catch (err) {
+    //     setError(err);
+    //     setIsLoading(false);
+    //   }
+    // };
 
-    fetchProduct();
+    fetchProducts();
   }, []);
 
   if (isLoading) {
@@ -54,7 +72,7 @@ const Products = () => {
               <div className="mt-4 flex justify-between">
                 <div>
                   <h3 className="text-sm text-gray-700">
-                    <Link to={`/products/${product.id}`} element={<Product/>}>
+                    <Link to={`/products/${product.id}`} element={<Product />}>
                       <span aria-hidden="true" className="absolute inset-0" />
                       {product.title}
                     </Link>
