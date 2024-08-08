@@ -1,16 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-
-
+import axios from "axios";
 
 const Product = () => {
   const { productId } = useParams();
 
+  const mutation = useMutation({
+    mutationFn: (newProduct) => {
+      return axios.put(
+        `https://dummyjson.com/products/${productId}`,
+        newProduct
+      );
+    },
+  });
+
   const fetchProduct = async () => {
-    const response = await fetch(
-      `https://dummyjson.com/products/${productId}`
-    );
+    const response = await fetch(`https://dummyjson.com/products/${productId}`);
     const data = await response.json();
     return data;
   };
@@ -58,6 +64,14 @@ const Product = () => {
 
   if (error) {
     return <h3>Error: {error.message}</h3>;
+  }
+
+  if(mutation.isLoading){
+    return <div>Loading...</div>;
+  }
+
+  if(mutation.error){
+    return <div>Error: {mutation.error.message}</div>
   }
 
   /*
@@ -115,6 +129,15 @@ const Product = () => {
             </span>
           </div>
         </div>
+
+        <button
+          className="bg-blue-900 text-white p-3 m-5 items-center flex-auto"
+          onClick={() => {
+            mutation.mutate({ title: "Updated product" });
+          }}
+        >
+          Update Product
+        </button>
       </div>
     </div>
   );
