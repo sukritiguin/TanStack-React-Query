@@ -49,38 +49,50 @@ const Product = () => {
   */
 
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white p-6">
-      <img
-        className="w-full h-48 object-cover"
-        src={product.thumbnail}
-        alt={product.title}
-      />
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{product.title}</div>
-        <p className="text-gray-700 text-base mb-4">{product.description}</p>
-        <div className="mb-2">
-          <span className="text-gray-700 font-semibold">Price: </span>
-          <span className="text-green-600">${product.price}</span>
-        </div>
-        <div className="mb-2">
-          <span className="text-gray-700 font-semibold">Rating: </span>
-          <span className="text-yellow-500">{product.rating} ⭐</span>
-        </div>
-        <div className="mb-2">
-          <span className="text-gray-700 font-semibold">Brand: </span>
-          <span>{product.brand}</span>
-        </div>
-        <div>
-          <span className="text-gray-700 font-semibold">Availability: </span>
-          <span
-            className={`font-semibold ${
-              product.availabilityStatus === "Low Stock"
-                ? "text-red-500"
-                : "text-green-500"
-            }`}
-          >
-            {product.availabilityStatus}
-          </span>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white p-4 border border-gray-200 transition-transform transform hover:scale-105">
+        <img
+          className="w-full h-48 object-cover rounded-lg mb-4"
+          src={product.thumbnail}
+          alt={product.title}
+        />
+        <div className="px-4">
+          <h2 className="font-semibold text-2xl text-gray-800 mb-2">
+            {product.title}
+          </h2>
+          <p className="text-gray-600 text-base mb-4">{product.description}</p>
+          <div className="flex items-center mb-2">
+            <span className="text-gray-700 font-medium text-sm">Price:</span>
+            <span className="text-green-600 text-xl font-semibold ml-2">
+              ${product.price}
+            </span>
+          </div>
+          <div className="flex items-center mb-2">
+            <span className="text-gray-700 font-medium text-sm">Rating:</span>
+            <span className="text-yellow-500 text-xl font-semibold ml-2">
+              {product.rating} ⭐
+            </span>
+          </div>
+          <div className="flex items-center mb-2">
+            <span className="text-gray-700 font-medium text-sm">Brand:</span>
+            <span className="text-gray-800 text-xl font-semibold ml-2">
+              {product.brand}
+            </span>
+          </div>
+          <div className="flex items-center">
+            <span className="text-gray-700 font-medium text-sm">
+              Availability:
+            </span>
+            <span
+              className={`ml-2 font-semibold ${
+                product.availabilityStatus === "Low Stock"
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
+            >
+              {product.availabilityStatus}
+            </span>
+          </div>
         </div>
       </div>
     </div>
